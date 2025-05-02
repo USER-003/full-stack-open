@@ -4,26 +4,28 @@ const Button = ({ onClick, text }) => {
   return <button onClick={onClick}>{text}</button>;
 };
 
-const Stadistic = ({ text, stadistic }) => {
+const Stadistic = ({ text, statistic }) => {
   return (
     <>
       <p>
-        {text} {stadistic}
+        {text} {statistic}
       </p>
     </>
   );
 };
 
 const Statistics = ({ stats }) => {
-  return (
+  return stats.all !== 0 ? (
     <>
-      <Stadistic text="good" stadistic={stats.good} />
-      <Stadistic text="neutral" stadistic={stats.neutral} />
-      <Stadistic text="bad" stadistic={stats.bad} />
-      <Stadistic text="all" stadistic={stats.all} />
-      <Stadistic text="average" stadistic={stats.average} />
-      <Stadistic text="positive" stadistic={stats.positive} />
+      <Stadistic text="good" statistic={stats.good} />
+      <Stadistic text="neutral" statistic={stats.neutral} />
+      <Stadistic text="bad" statistic={stats.bad} />
+      <Stadistic text="all" statistic={stats.all} />
+      <Stadistic text="average" statistic={stats.average} />
+      <Stadistic text="positive" statistic={stats.positive} />
     </>
+  ) : (
+    <p>No feedback given</p>
   );
 };
 
@@ -51,7 +53,7 @@ const App = () => {
     setNeutral((prevNeutral) => prevNeutral + 1);
 
     setAll((prevAll) => prevAll + 1);
-    setAverage((good + updatedNeutral + bad) / updatedAll);
+    setAverage((good + updatedNeutral + bad) / 3);
     setPositive((good / updatedAll) * 100);
   };
 
