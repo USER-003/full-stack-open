@@ -18,10 +18,41 @@ const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
   const [bad, setBad] = useState(0);
+  const [all, setAll] = useState(0);
+  const [average, setAverage] = useState(0);
+  const [positive, setPositive] = useState(0);
 
-  const handleGood = () => setGood((prevGood) => prevGood + 1);
-  const handleNeutral = () => setNeutral((prevNeutral) => prevNeutral + 1);
-  const handleBad = () => setBad((prevBad) => prevBad + 1);
+  const handleGood = () => {
+    const updatedGood = good + 1;
+    const updatedAll = all + 1;
+    setGood(updatedGood);
+
+    setAll(updatedAll);
+    setAverage((updatedGood + neutral + bad) / 3);
+    setPositive((updatedGood / updatedAll) * 100);
+  };
+
+  const handleNeutral = () => {
+    const updatedNeutral = neutral + 1;
+    const updatedAll = all + 1;
+    setNeutral((prevNeutral) => prevNeutral + 1);
+
+    setAll((prevAll) => prevAll + 1);
+    setAverage((good + updatedNeutral + bad) / updatedAll);
+    console.log((good + updatedNeutral + bad) / 3);
+    setPositive((good / updatedAll) * 100);
+  };
+
+  const handleBad = () => {
+    const updatedBad = bad + 1;
+    const updatedAll = all + 1;
+
+    setBad(updatedBad);
+
+    setAll(updatedAll);
+    setAverage((good + neutral + updatedBad) / 3);
+    setPositive((good / updatedAll) * 100);
+  };
 
   return (
     <>
@@ -34,6 +65,9 @@ const App = () => {
       <Stadistic text="good" stadistic={good} />
       <Stadistic text="neutral" stadistic={neutral} />
       <Stadistic text="bad" stadistic={bad} />
+      <Stadistic text="all" stadistic={all} />
+      <Stadistic text="average" stadistic={average} />
+      <Stadistic text="positive" stadistic={positive} />
     </>
   );
 };
