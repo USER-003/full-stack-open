@@ -14,6 +14,19 @@ const Stadistic = ({ text, stadistic }) => {
   );
 };
 
+const Statistics = ({ stats }) => {
+  return (
+    <>
+      <Stadistic text="good" stadistic={stats.good} />
+      <Stadistic text="neutral" stadistic={stats.neutral} />
+      <Stadistic text="bad" stadistic={stats.bad} />
+      <Stadistic text="all" stadistic={stats.all} />
+      <Stadistic text="average" stadistic={stats.average} />
+      <Stadistic text="positive" stadistic={stats.positive} />
+    </>
+  );
+};
+
 const App = () => {
   const [good, setGood] = useState(0);
   const [neutral, setNeutral] = useState(0);
@@ -39,7 +52,6 @@ const App = () => {
 
     setAll((prevAll) => prevAll + 1);
     setAverage((good + updatedNeutral + bad) / updatedAll);
-    console.log((good + updatedNeutral + bad) / 3);
     setPositive((good / updatedAll) * 100);
   };
 
@@ -62,12 +74,7 @@ const App = () => {
       <Button onClick={handleBad} text="bad" />
 
       <h1>statistics</h1>
-      <Stadistic text="good" stadistic={good} />
-      <Stadistic text="neutral" stadistic={neutral} />
-      <Stadistic text="bad" stadistic={bad} />
-      <Stadistic text="all" stadistic={all} />
-      <Stadistic text="average" stadistic={average} />
-      <Stadistic text="positive" stadistic={positive} />
+      <Statistics stats={{ good, neutral, bad, all, average, positive }} />
     </>
   );
 };
