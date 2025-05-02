@@ -30,12 +30,34 @@ const App = () => {
     setVotes(tempVotes);
   };
 
+  const handleMostVotedAnecdote = () => {
+    const maxVotes = Math.max(...votes);
+    const mostVotedAnecdote = votes.indexOf(maxVotes);
+    return anecdotes[mostVotedAnecdote];
+  };
+
+  const handleMostVotes = () => {
+    const maxVotes = Math.max(...votes);
+    return maxVotes;
+  };
+
   return (
     <>
+      <h1>Anecdote of the day</h1>
       <div>{anecdotes[selected]}</div>
       <p>has {votes[selected]} votes</p>
       <Button text="vote" onClick={handleVote} />
       <Button text="next anecdote" onClick={handleAnecdote} />
+
+      <h1>Anecdote with most votes</h1>
+      {votes.every((vote) => vote === 0) ? (
+        <p>No votes yet</p>
+      ) : (
+        <div>
+          <div>{handleMostVotedAnecdote()}</div>
+          <p>has {handleMostVotes()} votes</p>
+        </div>
+      )}
     </>
   );
 };
