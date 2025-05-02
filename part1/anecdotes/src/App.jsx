@@ -4,6 +4,15 @@ const Button = ({ onClick, text }) => {
   return <button onClick={onClick}>{text}</button>;
 };
 
+const Display = ({ anecdote, votes }) => {
+  return (
+    <>
+      <div>{anecdote}</div>
+      <p>has {votes} votes</p>
+    </>
+  );
+};
+
 const App = () => {
   const anecdotes = [
     "If it hurts, do it more often.",
@@ -44,8 +53,7 @@ const App = () => {
   return (
     <>
       <h1>Anecdote of the day</h1>
-      <div>{anecdotes[selected]}</div>
-      <p>has {votes[selected]} votes</p>
+      <Display anecdote={anecdotes[selected]} votes={votes[selected]} />
       <Button text="vote" onClick={handleVote} />
       <Button text="next anecdote" onClick={handleAnecdote} />
 
@@ -54,8 +62,10 @@ const App = () => {
         <p>No votes yet</p>
       ) : (
         <div>
-          <div>{handleMostVotedAnecdote()}</div>
-          <p>has {handleMostVotes()} votes</p>
+          <Display
+            anecdote={handleMostVotedAnecdote()}
+            votes={handleMostVotes()}
+          />
         </div>
       )}
     </>
