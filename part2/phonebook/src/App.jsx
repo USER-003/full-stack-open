@@ -4,8 +4,16 @@ const App = () => {
   const [persons, setPersons] = useState([{ id: 1, name: "Arto Hellas" }]);
   const [newName, setNewName] = useState("");
 
+  const checkNameExistence = () => {
+    return persons.some((person) => person.name === newName);
+  };
+
   const handleAddPerson = (event) => {
     event.preventDefault();
+    if (checkNameExistence()) {
+      alert(`${newName} is already added to phonebook`);
+      return;
+    }
     const personObject = {
       name: newName,
       id: String(persons.length + 1),
