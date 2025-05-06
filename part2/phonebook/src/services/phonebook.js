@@ -11,4 +11,8 @@ const create = (phoneObject) => {
     return request.then(response => response.data)
 }
 
-export default {getAll, create}
+const remove = (id) => {
+    axios.delete(`${baseUrl}/${id}`)
+}
+
+export default {getAll, create, remove}

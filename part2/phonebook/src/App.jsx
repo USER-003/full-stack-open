@@ -54,6 +54,16 @@ const App = () => {
     setNewSearch(event.target.value);
   };
 
+  const deletePerson = (person) => {
+    if (confirm(`Delete ${person.name}`)) {
+      phoneService.remove(person.id);
+
+      setPersons((prevElementos) =>
+        prevElementos.filter((elemento) => elemento.id !== person.id)
+      );
+    }
+  };
+
   const numberToShow = newSearch
     ? persons.filter((person) =>
         person.name.toLowerCase().includes(newSearch.toLowerCase())
@@ -72,7 +82,7 @@ const App = () => {
       />
 
       <h2>Numbers</h2>
-      <Persons data={numberToShow} />
+      <Persons data={numberToShow} deletePerson={deletePerson} />
     </div>
   );
 };
