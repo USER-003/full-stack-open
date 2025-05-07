@@ -3,12 +3,15 @@ import Filter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Persons from "./components/Persons";
 import phoneService from "./services/phonebook";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [newSearch, setNewSearch] = useState("");
+  const [errorMessage, setErrorMessage] = useState(null);
+  const [succeedMessage, setSucceedMessage] = useState(null);
 
   //Get all persons
   useEffect(() => {
@@ -16,6 +19,20 @@ const App = () => {
       setPersons(response);
     });
   }, []);
+
+  const handleError = (message) => {
+    setErrorMessage(message);
+    setTimeout(() => {
+      setErrorMessage(null);
+    }, 5000);
+  };
+
+  const handleSucceed = (message) => {
+    setSucceedMessage(message);
+    setTimeout(() => {
+      setSucceedMessage(null);
+    }, 5000);
+  };
 
   //Check if name already exists
   const checkNameExistence = (name) => {
@@ -32,9 +49,18 @@ const App = () => {
         `${newName} is already added to phonebook, replace the old number with a new one?`
       )
     ) {
-      phoneService.updateNumber(id, personObject).then((response) => {
-        setPersons(persons.map((p) => (p.id === id ? response : p)));
-      });
+      phoneService
+        .updateNumber(id, personObject)
+        .then((response) => {
+          setPersons(persons.map((p) => (p.id === id ? response : p)));
+
+          handleSucceed(`Updated '${personObject.name}'`);
+        })
+        .catch(() => {
+          handleError(
+            `Error trying to update ${personObject.name} try again later`
+          );
+        });
 
       setNewName("");
       setNewNumber("");
@@ -57,11 +83,18 @@ const App = () => {
       id: String(persons.length + 1),
     };
 
-    phoneService.create(personObject).then((response) => {
-      setPersons(persons.concat(response));
-      setNewName("");
-      setNewNumber("");
-    });
+    phoneService
+      .create(personObject)
+      .then((response) => {
+        setPersons(persons.concat(response));
+
+        handleSucceed(`Added '${personObject.name}'`);
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch(() => {
+        handleError(`Error trying to add ${personObject.name} try again later`);
+      });
   };
 
   //Event handlers
@@ -79,11 +112,18 @@ const App = () => {
 
   const deletePerson = (person) => {
     if (confirm(`Delete ${person.name}`)) {
-      phoneService.remove(person.id);
+      phoneService
+        .remove(person.id)
+        .then(() => {
+          handleSucceed(`Deleted '${person.name}'`);
 
-      setPersons((prevElementos) =>
-        prevElementos.filter((elemento) => elemento.id !== person.id)
-      );
+          setPersons((prevElementos) =>
+            prevElementos.filter((elemento) => elemento.id !== person.id)
+          );
+        })
+        .catch(() => {
+          handleError(`Error trying to delete ${person.name} try again later`);
+        });
     }
   };
 
@@ -96,6 +136,8 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification style="error" message={errorMessage} />
+      <Notification style="succeed" message={succeedMessage} />
       <Filter value={newSearch} method={handleNewSearch} />
 
       <h2>Add a new</h2>

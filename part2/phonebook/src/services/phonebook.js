@@ -17,7 +17,7 @@ const updateNumber = (id, phoneObject) => {
 }
 
 const remove = (id) => {
-    axios.delete(`${baseUrl}/${id}`)
+    return axios.delete(`${baseUrl}/${id}`)
 }
 
 export default {getAll, create, remove, updateNumber}
