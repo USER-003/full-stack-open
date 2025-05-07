@@ -11,8 +11,13 @@ const create = (phoneObject) => {
     return request.then(response => response.data)
 }
 
+const updateNumber = (id, phoneObject) => {
+    const request = axios.put(`${baseUrl}/${id}`, phoneObject)
+    return request.then(response => response.data)
+}
+
 const remove = (id) => {
     axios.delete(`${baseUrl}/${id}`)
 }
 
-export default {getAll, create, remove}
+export default {getAll, create, remove, updateNumber}

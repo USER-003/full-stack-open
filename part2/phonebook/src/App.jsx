@@ -10,22 +10,44 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("");
   const [newSearch, setNewSearch] = useState("");
 
+  //Get all persons
   useEffect(() => {
     phoneService.getAll().then((response) => {
       setPersons(response);
     });
   }, []);
 
-  const checkNameExistence = () => {
-    return persons.some((person) => person.name === newName);
+  //Check if name already exists
+  const checkNameExistence = (name) => {
+    return persons.find((person) => person.name === name);
   };
 
+  //Update person number if already exists
+  const updatePerson = (checkPerson) => {
+    const id = checkPerson.id;
+    const personObject = { ...checkPerson, name: newName, number: newNumber };
+
+    if (
+      confirm(
+        `${newName} is already added to phonebook, replace the old number with a new one?`
+      )
+    ) {
+      phoneService.updateNumber(id, personObject).then((response) => {
+        setPersons(persons.map((p) => (p.id === id ? response : p)));
+      });
+
+      setNewName("");
+      setNewNumber("");
+    }
+  };
+
+  // Add a new person to the db
   const handleAddPerson = (event) => {
     event.preventDefault();
 
-    if (checkNameExistence()) {
-      alert(`${newName} is already added to phonebook`);
-      setNewName("");
+    const checkPerson = checkNameExistence(newName);
+    if (checkPerson) {
+      updatePerson(checkPerson);
       return;
     }
 
@@ -42,6 +64,7 @@ const App = () => {
     });
   };
 
+  //Event handlers
   const handleNewName = (event) => {
     setNewName(event.target.value);
   };
