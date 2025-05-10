@@ -24,6 +24,8 @@ let persons = [
     }
 ]
 
+app.use(express.json())
+
 app.get('/', (request, response) => {
     response.send('<h1>Phonebook Backend</h1>')
 })
@@ -41,6 +43,49 @@ app.get('/api/persons/:id', (request, response) => {
     } else {
         response.status(404).end()
     }
+})
+
+
+const generateId = () => {
+    const max = (persons.length + 2) * 10
+    const min = persons.length + 1
+    return Math.floor(Math.random() * (max - min)) + min;
+}
+
+app.post('/api/persons', (request, response) => {
+    const body = request.body
+    const name = body.name
+    const number = body.number
+
+    if (!name) {
+        return response.status(400).json({ 
+            error: 'name missing' 
+        })
+    }
+    
+
+    if (!number) {
+        return response.status(400).json({ 
+            error: 'number missing' 
+        })
+    }
+
+    
+    if (persons.some(person => person.name === name)) {
+        return response.status(409).json({ 
+            error: 'name must be unique' 
+        })
+    }
+
+    const person = {
+        id: generateId(),
+        name: body.name,
+        number: body.number,
+    }
+
+    persons = persons.concat(person)
+
+    response.json(person)
 })
 
 app.delete('/api/persons/:id', (request, response) => {
