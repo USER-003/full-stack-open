@@ -25,6 +25,8 @@ let persons = [
     }
 ]
 
+app.use(express.static('dist'))
+
 app.use(express.json())
 
 morgan.token('body', (req) => {
@@ -32,10 +34,6 @@ morgan.token('body', (req) => {
 });
 
 app.use(morgan(':method :url :status :body'));
-
-app.get('/', (request, response) => {
-    response.send('<h1>Phonebook Backend</h1>')
-})
 
 app.get('/api/persons', (request, response) => {
     response.json(persons)
@@ -110,7 +108,7 @@ app.get('/info', (request, response) => {
     response.send(info)
 })
 
-const PORT = 3001
+const PORT = process.env.PORT || 3001
 app.listen(PORT, () => {
     console.log(`Server running on:  http://localhost:${PORT}`)
 }) 
