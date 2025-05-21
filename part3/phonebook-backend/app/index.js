@@ -54,7 +54,7 @@ app.get('/api/persons/:id', (request, response) => {
 const generateId = () => {
     const max = (persons.length + 2) * 10
     const min = persons.length + 1
-    return Math.floor(Math.random() * (max - min)) + min;
+    return String(Math.floor(Math.random() * (max - min)) + min);
 }
 
 app.post('/api/persons', (request, response) => {
